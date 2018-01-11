@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
+#signature {
+}
+
+#signature canvas {
+    /* width: 400px;
+    height: 150px; */
+    background-color: grey;
+}
