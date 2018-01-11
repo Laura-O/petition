@@ -10,7 +10,6 @@ $(document).ready(function() {
     $canvas.on("mousedown", function(e) {
         let mouseX = e.pageX - $canvas.offsetLeft;
         let mouseY = e.pageY - $canvas.offsetTop;
-        console.log("x: ", mouseX, " y: ", mouseY);
 
         draw = true;
         newStroke(mouseX, mouseY, false);
@@ -61,4 +60,29 @@ $(document).ready(function() {
     }
 
     // Submit
+
+    $("#submit").on("click", function(e) {
+        var signatureForm = document.getElementById("signature-form");
+
+        let firstName = signatureForm.first.value;
+        let lastName = signatureForm.last.value;
+        let signature = document.getElementById("canvas").toDataURL();
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        $.ajax({
+            url: "http://localhost:8080/petition",
+            type: "POST",
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                signature: signature,
+            },
+            success: function(data) {
+                console.log("success");
+                console.log(JSON.stringify(data));
+            },
+        });
+    });
 });
