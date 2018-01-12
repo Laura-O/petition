@@ -31,11 +31,6 @@ $(document).ready(function() {
         draw = false;
     });
 
-    $("#submit").on("click", function(e) {
-        let signature = document.getElementById("canvas").toDataURL();
-        document.getElementById("hidden-signature").value = signature;
-    });
-
     function newStroke(x, y, moving) {
         clickX.push(x);
         clickY.push(y);
@@ -62,4 +57,9 @@ $(document).ready(function() {
             context.stroke();
         }
     }
+
+    $("#submit").on("click", function(e) {
+        let signature = document.getElementById("canvas").toDataURL();
+        document.getElementById("hiddensig").value = signature;
+    });
 });

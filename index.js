@@ -1,21 +1,11 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
-const pg = require("pg");
-const Pool = require("pg-pool");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
+const bcrypt = require("bcryptjs");
 
-const config = {
-    host: "localhost",
-    port: 5432,
-    database: "petition",
-};
-
-const pool = new Pool(config);
-pool.on("error", function(err) {
-    console.log(err);
-});
+const pool = require("./db.js");
 
 let hbs = exphbs.create({
     defaultLayout: "main",
@@ -37,6 +27,10 @@ app.use(
     }),
 );
 
+app.get("/", function(req, res) {
+    res.redirect("/petition");
+});
+
 app.get("/petition", function(req, res) {
     console.log(req.cookies);
     var scripts = [{ script: "/js/main.js" }];
@@ -47,32 +41,68 @@ app.get("/petition", function(req, res) {
 });
 
 app.post("/petition", function(req, res) {
-    res.setHeader("Content-Type", "application/json");
     let query = "INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id";
 
     pool.connect().then(client => {
         client
             .query(query, [req.body.first, req.body.last, req.body.hiddensig])
             .then(results => {
-                req.session.signatureId = results;
-                res.redirect("/thanks");
+                req.session.sigId = results.rows[0].id;
+                res.cookie("signed", "signed", {
+                    httpOnly: true,
+                });
+                console.log(req.body);
+                res.render("petition-thanks", {
+                    data: req.body,
+                    css: "styles.css",
+                });
                 client.release();
             })
-            .catch(e => {
+            .catch(err => {
                 client.release();
-                console.error("query error", e.message, e.stack);
+                console.error("query error", err.message, err.stack);
             });
     });
 });
 
-app.get("/thanks", function(req, res) {
-    res.render("petition-thanks", {
+app.get("/register", (req, res) => {
+    res.render("petition-register", {
         css: "styles.css",
     });
 });
 
+app.get("/login", (req, res) => {
+    res.render("petition-login", {
+        css: "styles.css",
+    });
+});
+
+app.get("/thanks", requireSignature, (req, res) => {
+    console.log(req.session.sigId);
+
+    let query = "SELECT * FROM signatures WHERE id=$1";
+    pool.connect().then(client => {
+        client
+            .query(query, [req.session.sigId])
+            .then(results => {
+                res.render("petition-thanks", {
+                    img: results.rows[0].signature,
+                    css: "styles.css",
+                });
+                client.release();
+            })
+            .catch(err => {
+                client.release();
+                console.error("query error", err.message, err.stack);
+            });
+    });
+});
+
 app.get("/clearcookie", function(req, res) {
-    clearCookie("cookie_name");
+    res.clearCookie("signed");
+    res.clearCookie("session");
+    res.clearCookie("session.sig");
+    req.session = null;
     res.send("Cookie deleted");
 });
 
@@ -80,14 +110,13 @@ app.listen(8080, function() {
     console.log("Listening on 8080");
 });
 
-app.get("/signers", (req, res) => {
+app.get("/signers", requireSignature, (req, res) => {
     let query = "SELECT first, last FROM signatures";
 
     pool.connect().then(client => {
         client
             .query(query)
             .then(results => {
-                console.log(results);
                 res.render("petition-signers", {
                     css: "styles.css",
                     results: results.rows,
@@ -100,3 +129,13 @@ app.get("/signers", (req, res) => {
             });
     });
 });
+
+function requireSignature(req, res, next) {
+    if (!req.cookies.signed) {
+        res.redirect("/petition");
+    } else {
+        next();
+    }
+}
+
+function checkAuth(req, res, next) {}
