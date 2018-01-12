@@ -3,8 +3,8 @@
         <div id="signature">
             <form id="signature-form" method="POST">
                 <div>
-                    <input type="text" id="first" name="first">
-                    <input type="text" name="last" id="last">
+                    <input type="text" id="first" name="first" value={{user.first}}>
+                    <input type="text" name="last" id="last" value={{user.last}}>
                 </div>
                 <input type="hidden" name="hiddensig" id="hiddensig">
                 <canvas style="width:400px;height:200px;background-color:grey" width="400" height="200" id="canvas"></canvas>
