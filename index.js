@@ -1,10 +1,8 @@
 const express = require("express");
-const app = express();
-const hb = require("express-handlebars");
+const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const pg = require("pg");
 const Pool = require("pg-pool");
-// const client = new pg.Client("postgres://localhost:5432/petition");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
@@ -19,7 +17,13 @@ pool.on("error", function(err) {
     console.log(err);
 });
 
-app.engine("handlebars", hb());
+let hbs = exphbs.create({
+    defaultLayout: "main",
+    helpers: {},
+});
+
+const app = express();
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -34,9 +38,11 @@ app.use(
 );
 
 app.get("/petition", function(req, res) {
+    console.log(req.cookies);
+    var scripts = [{ script: "/js/main.js" }];
     res.render("petition-sign", {
-        layout: "layout",
         css: "styles.css",
+        scripts: scripts,
     });
 });
 
@@ -44,52 +50,53 @@ app.post("/petition", function(req, res) {
     res.setHeader("Content-Type", "application/json");
     let query = "INSERT INTO signatures (first, last, signature) VALUES ($1, $2, $3) RETURNING id";
 
-    pool.query(query, [req.body.firstName, req.body.lastName, req.body.signature], function(
-        err,
-        results,
-    ) {
-        if (err) {
-            console.log(err);
-        } else {
-            req.session.signatureId = results;
-            res.redirect("/thanks");
-        }
+    pool.connect().then(client => {
+        client
+            .query(query, [req.body.first, req.body.last, req.body.hiddensig])
+            .then(results => {
+                req.session.signatureId = results;
+                res.redirect("/thanks");
+                client.release();
+            })
+            .catch(e => {
+                client.release();
+                console.error("query error", e.message, e.stack);
+            });
     });
 });
 
 app.get("/thanks", function(req, res) {
     res.render("petition-thanks", {
-        layout: "layout",
         css: "styles.css",
     });
 });
 
-app.get("/signers", function(req, res) {
-    getSigners(function(err, results) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("petition-signers", {
-                layout: "layout",
-                css: "styles.css",
-                results: results,
-            });
-        }
-    });
+app.get("/clearcookie", function(req, res) {
+    clearCookie("cookie_name");
+    res.send("Cookie deleted");
 });
 
 app.listen(8080, function() {
     console.log("Listening on 8080");
 });
 
-function getSigners(callback) {
+app.get("/signers", (req, res) => {
     let query = "SELECT first, last FROM signatures";
 
-    pool.query(query, function(err, results) {
-        if (err) {
-            console.log(err);
-        } else {
-            callback(null, results.rows);
-        }
+    pool.connect().then(client => {
+        client
+            .query(query)
+            .then(results => {
+                console.log(results);
+                res.render("petition-signers", {
+                    css: "styles.css",
+                    results: results.rows,
+                });
+                client.release();
+            })
+            .catch(e => {
+                client.release();
+                console.error("query error", e.message, e.stack);
+            });
     });
-}
+});

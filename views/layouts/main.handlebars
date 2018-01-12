@@ -13,8 +13,9 @@
 <html>
 {{> header}} {{{body}}}
 
-<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-<script src="main.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script> {{!--
+<script src="js/main.js"></script> --}} {{#each scripts}}
+<script src="{{script}}"></script> {{/each}}
 
 </body>
 

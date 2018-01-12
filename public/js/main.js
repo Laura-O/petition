@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // Canvas
     const $canvas = $("#canvas");
     let context = $canvas[0].getContext("2d");
     let draw = false;
@@ -32,6 +31,11 @@ $(document).ready(function() {
         draw = false;
     });
 
+    $("#submit").on("click", function(e) {
+        let signature = document.getElementById("canvas").toDataURL();
+        document.getElementById("hidden-signature").value = signature;
+    });
+
     function newStroke(x, y, moving) {
         clickX.push(x);
         clickY.push(y);
@@ -58,31 +62,4 @@ $(document).ready(function() {
             context.stroke();
         }
     }
-
-    // Submit
-
-    $("#submit").on("click", function(e) {
-        var signatureForm = document.getElementById("signature-form");
-
-        let firstName = signatureForm.first.value;
-        let lastName = signatureForm.last.value;
-        let signature = document.getElementById("canvas").toDataURL();
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        $.ajax({
-            url: "http://localhost:8080/petition",
-            type: "POST",
-            data: {
-                firstName: firstName,
-                lastName: lastName,
-                signature: signature,
-            },
-            success: function(data) {
-                console.log("success");
-                console.log(JSON.stringify(data));
-            },
-        });
-    });
 });
