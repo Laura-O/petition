@@ -1,22 +1,23 @@
 <body>
-    <div id="container">
-        <div id="register">
-            <form id="register-form" method="POST">
-                <div>
-                    <label for="first">First name</label>
-                    <input type="text" name="first" id="first">
-                    <label for="last">Last name</label>
-                    <input type="text" name="last" id="last">
+    <div class="container">
+        <div class="wrapper">
+            <div class="center">
+
+                <div id="register">
+                    <form id="register-form" method="POST">
+                        <div>
+                            <input type="text" name="first" id="first" placeholder="First Name">
+                            <input type="text" name="last" id="last" placeholder="Last Name">
+                        </div>
+                        <div>
+                            <input type="email" name="email" id="email" placeholder="Email Address">
+                            <input type="password" name="password">
+                        </div>
+                        <div>
+                            <input id="submit" type="submit" value="Register" placeholder="Password">
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <label for="email">Email address</label>
-                    <input type="text" name="email" id="email">
-                    <label for="password">Password</label>
-                    <input type="password" name="password">
-                </div>
-                <div>
-                    <button id="submit" type="submit" value="Register">Register</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>

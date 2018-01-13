@@ -29,19 +29,15 @@ app.use(
 );
 
 app.get("/", function(req, res) {
-    res.redirect("/petition");
+    res.render("/petition-main", { user: req.session.user });
 });
 
 app.get("/petition", requireSession, function(req, res) {
-    console.log(req.session.user);
     var scripts = [{ script: "/js/main.js" }];
     res.render("petition-sign", {
         css: "styles.css",
         scripts: scripts,
-        user: {
-            first: req.session.user.first,
-            last: req.session.user.last,
-        },
+        user: req.session.user,
     });
 });
 
@@ -89,6 +85,7 @@ app.post("/register", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("petition-login", {
         css: "styles.css",
+        user: req.session.user,
     });
 });
 

@@ -11,9 +11,14 @@
 </head>
 
 <html>
-{{> header}} {{{body}}}
+<div class="wrapper">
+    {{> header}}
+    <section>{{{body}}}
+    </section>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.2.1.js"></script> {{#each scripts}}
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="js/nav.js"></script> {{#each scripts}}
 <script src="{{script}}"></script> {{/each}}
 
 </body>
