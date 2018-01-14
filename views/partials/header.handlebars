@@ -1,7 +1,5 @@
 <header class="top">
-    <h1>
-        <a href="http://">Petition</a>
-    </h1>
+    <h1>Petition</h1>
 </header>
 <nav class="flex-nav">
     <a href="#" class="toggleNav">
@@ -9,7 +7,7 @@
     <ul>
         {{#if user}}
         <li>
-            Logged in as {{user.first}}
+            <i class="fas fa-user"></i> {{user.first}}
         </li>
         <li>
             <button type="submit" value="Logout">Logout</button>
