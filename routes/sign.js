@@ -12,10 +12,10 @@ router.get("/petition", middleware.requireSession, function(req, res) {
 });
 
 router.post("/petition", function(req, res) {
-    let query = "INSERT INTO signatures (id, first, last, signature) VALUES ($1, $2, $3, $4)";
+    let query = "INSERT INTO signatures (signature, user_id) VALUES ($1, $2)";
 
     db
-        .query(query, [req.session.user.id, req.body.first, req.body.last, req.body.hiddensig])
+        .query(query, [req.body.hiddensig, req.session.user.id])
         .then(results => {
             req.session.user.signed = true;
             res.redirect("/thanks");
@@ -26,7 +26,7 @@ router.post("/petition", function(req, res) {
 });
 
 router.get("/thanks", middleware.requireSigned, (req, res) => {
-    let query = "SELECT * FROM signatures WHERE id=$1";
+    let query = "SELECT * FROM users join signatures on $1 = signatures.user_id";
 
     db
         .query(query, [req.session.user.id])
@@ -45,7 +45,7 @@ router.get("/thanks", middleware.requireSigned, (req, res) => {
 });
 
 router.get("/signers", middleware.requireSigned, (req, res) => {
-    let query = "SELECT first, last FROM signatures";
+    let query = "SELECT * FROM users join signatures on users.id = signatures.user_id";
 
     db
         .query(query)

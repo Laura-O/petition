@@ -6,7 +6,7 @@ function hashPassword(plainTextPassword) {
             if (err) {
                 return reject(err);
             }
-            bcrypt.hash(plainTextPassword, salt, function(err, hash) {
+            bcrypt.hash(plainTextPassword, salt, (err, hash) => {
                 if (err) {
                     return reject(err);
                 }
@@ -18,10 +18,7 @@ function hashPassword(plainTextPassword) {
 
 function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
     return new Promise(function(resolve, reject) {
-        bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(
-            err,
-            doesMatch,
-        ) {
+        bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, (err, doesMatch) => {
             if (err) {
                 reject(err);
             } else {

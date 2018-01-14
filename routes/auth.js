@@ -37,16 +37,24 @@ router.get("/login", (req, res) => {
 
 router.post("/login", (req, res) => {
     const { email, password } = req.body;
-    let query = "SELECT pass FROM users WHERE email = $1";
+    let query = "SELECT pass, id FROM users WHERE email = $1";
 
     db
         .query(query, [email])
-        .then(dbPassword => {
+        .then(results => {
             user
-                .checkPassword(password, dbPassword.rows[0].pass)
+                .checkPassword(password, results.rows[0].pass)
                 .then(result => {
                     if (result) {
+                        req.session.user = {
+                            id: results.rows[0].id,
+                            first: req.body.first,
+                            last: req.body.last,
+                            email: req.body.email,
+                        };
+                        res.redirect("/petition");
                     } else {
+                        res.redirect("/login");
                     }
                 })
                 .catch(err => {
@@ -59,7 +67,6 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-    console.log("post");
     req.session = null;
     res.redirect("/petition");
 });

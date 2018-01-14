@@ -7,10 +7,14 @@ function requireSession(req, res, next) {
 }
 
 function requireSigned(req, res, next) {
-    if (!req.session.user.signed) {
-        res.redirect("/petition");
+    if (req.session.user) {
+        if (req.session.user.signed) {
+            next();
+        } else {
+            res.redirect("/petition");
+        }
     } else {
-        next();
+        res.redirect("/register");
     }
 }
 
