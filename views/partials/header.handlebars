@@ -1,27 +1,28 @@
 <header class="top">
-    <h1>Petition</h1>
+    <h1 id="colored-title">Petition: {{> title}}</h1>
+
+    <nav class="flex-nav">
+        <a href="#" class="toggleNav">
+            <i class="fa fa-bars"></i>Menu</a>
+        <ul>
+            {{#if user}}
+            <li>
+                <form action="/logout" method="POST">
+                    <input type="submit" value="Logout" class="logout" />
+                </form>
+            </li>
+            {{else}}
+            <li>
+                <form action="/login" method="GET">
+                    <input type="submit" value="Login" class="login" />
+                </form>
+            </li>
+            <li>
+                <form action="/register" method="GET">
+                    <input type="submit" value="Register" class="register" />
+                </form>
+            </li>
+            {{/if}}
+        </ul>
+    </nav>
 </header>
-<nav class="flex-nav">
-    <a href="#" class="toggleNav">
-        <i class="fa fa-bars"></i>Menu</a>
-    <ul>
-        {{#if user}}
-        <li>
-            <form action="/logout" method="POST">
-                <input type="submit" value="Logout" class="logout" />
-            </form>
-        </li>
-        {{else}}
-        <li>
-            <form action="/login" method="GET">
-                <input type="submit" value="Login" class="login" />
-            </form>
-        </li>
-        <li>
-            <form action="/register" method="GET">
-                <input type="submit" value="Register" class="register" />
-            </form>
-        </li>
-        {{/if}}
-    </ul>
-</nav>

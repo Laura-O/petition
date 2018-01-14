@@ -52,8 +52,14 @@ section {
 }
 
 h1 {
-    font-family: "Bungee", cursive;
+    font-family: "Bowlby One SC", cursive;
     margin: 10px 5px;
+    color: #0060b8;
+    -webkit-text-stroke: 2px black;
+}
+
+#colored-title span {
+    margin-left: -5px;
 }
 
 .flex-nav ul {
@@ -136,6 +142,8 @@ label {
 }
 
 header {
+    display: flex;
+    justify-content: space-between;
     margin: 0 auto;
 }
 
@@ -221,6 +229,9 @@ footer {
     .top {
         order: 2;
     }
+    #colored-title {
+        font-size: 20px;
+    }
 }
 
 /* Login & logout buttons */
@@ -262,4 +273,20 @@ input[type="submit"] {
     background: white;
     border: 1px solid black;
     padding: 20px 10px;
+}
+
+h1 span:nth-child(1n) {
+    color: #f4145d;
+}
+
+h1 span:nth-child(2n) {
+    color: #00a2e0;
+}
+
+h1 span:nth-child(3n) {
+    color: #ffdd03;
+}
+
+h1 span:nth-child(4n) {
+    color: #70bf42;
 }
