@@ -25,7 +25,7 @@ router.post("/petition", function(req, res) {
         });
 });
 
-router.get("/thanks", (req, res) => {
+router.get("/thanks", middleware.requireSigned, (req, res) => {
     let query = "SELECT * FROM signatures WHERE id=$1";
 
     db
@@ -44,7 +44,7 @@ router.get("/thanks", (req, res) => {
         });
 });
 
-router.get("/signers", middleware.requireSession, (req, res) => {
+router.get("/signers", middleware.requireSigned, (req, res) => {
     let query = "SELECT first, last FROM signatures";
 
     db
