@@ -1,3 +1,4 @@
+jQuery.fx.interval = 100;
 $(document).ready(function() {
     $(".toggleNav").on("click", function() {
         $(".flex-nav ul").toggleClass("open");

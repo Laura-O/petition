@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
+const flash = require("connect-flash");
 
 const db = require("./models/db.js");
 
@@ -23,6 +24,7 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(flash());
 
 app.use(
     cookieSession({
@@ -30,6 +32,11 @@ app.use(
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
     }),
 );
+
+app.get("/flash", function(req, res) {
+    req.flash("info", "Flash is back!");
+    res.redirect("/");
+});
 
 app.use(authRoutes);
 app.use(petitionRoutes);

@@ -31,9 +31,10 @@ a:focus {
     display: none;
 }
 
-.wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
+.outer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .container {
@@ -58,6 +59,15 @@ h1 {
     -webkit-text-stroke: 2px black;
 }
 
+.message {
+    align-self: center;
+    width: 50%;
+    max-width: 400px;
+    border: solid 2px #f4145d;
+    background-color: white;
+    padding: 2px;
+}
+
 #colored-title span {
     margin-left: -5px;
 }
@@ -65,7 +75,7 @@ h1 {
 .flex-nav ul {
     list-style: none;
     margin: 0;
-    padding: 5px;
+    padding: 0 5px;
     display: flex;
     justify-content: flex-end;
 }
@@ -142,9 +152,9 @@ label {
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
+    /* display: flex;
+    justify-content: space-between; */
+    margin: 0px 10px;
 }
 
 footer {

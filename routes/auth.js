@@ -5,7 +5,10 @@ const db = require("../models/db.js");
 const middleware = require("../middleware/index.js");
 
 router.get("/register", (req, res) => {
-    res.render("petition-register", {});
+    res.render("petition-register", {
+        error: req.flash("error"),
+        info: req.flash("info"),
+    });
 });
 
 router.post("/register", (req, res) => {

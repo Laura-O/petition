@@ -8,6 +8,8 @@ router.get("/petition", middleware.requireSession, function(req, res) {
     res.render("petition-sign", {
         scripts: scripts,
         user: req.session.user,
+        error: req.flash("error"),
+        info: req.flash("info"),
     });
 });
 

@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", function(req, res) {
-    res.render("petition-main", { user: req.session.user });
+    res.render("petition-main", {
+        user: req.session.user,
+        error: req.flash("error"),
+        info: req.flash("info"),
+    });
 });
 
 router.get("/clearcookie", function(req, res) {
