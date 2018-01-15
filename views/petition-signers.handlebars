@@ -3,7 +3,7 @@
         <div id="signers">
             <ul>
                 {{#each results}}
-                <li>{{this.first}} {{this.last}}</li>
+                <li>{{this.first}} {{this.last}} {{#if this.age}}({{this.age}}{{#if this.city}}, {{this.city}}{{/if}}){{/if}}</li>
                 {{/each}}
             </ul>
         </div>

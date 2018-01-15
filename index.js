@@ -11,6 +11,7 @@ const db = require("./models/db.js");
 const authRoutes = require("./routes/auth.js");
 const petitionRoutes = require("./routes/sign.js");
 const indexRoutes = require("./routes/index.js");
+const userRoutes = require("./routes/user.js");
 
 let hbs = exphbs.create({
     defaultLayout: "main",
@@ -41,6 +42,7 @@ app.get("/flash", function(req, res) {
 app.use(authRoutes);
 app.use(petitionRoutes);
 app.use(indexRoutes);
+app.use(userRoutes);
 
 app.listen(8080, function() {
     console.log("Listening on 8080");

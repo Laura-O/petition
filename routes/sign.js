@@ -47,12 +47,14 @@ router.get("/thanks", middleware.requireSigned, (req, res) => {
 });
 
 router.get("/signers", middleware.requireSigned, (req, res) => {
-    let query = "SELECT * FROM users join signatures on users.id = signatures.user_id";
+    let query =
+        "SELECT * from users join signatures on users.id = signatures.user_id join user_profiles on users.id = user_profiles.user_id";
 
     db
         .query(query)
         .then(results => {
             res.render("petition-signers", {
+                user: req.session.user,
                 results: results.rows,
             });
         })
