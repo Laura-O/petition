@@ -193,6 +193,10 @@ footer {
     z-index: 0;
 }
 
+#signers {
+    width: 50%;
+}
+
 @media all and (max-width: 768px) {
     .flex-nav li,
     .gallery li {

@@ -35,8 +35,7 @@ router.post("/profile", middleware.requireSession, function(req, res) {
     let query =
         "INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id, age = EXCLUDED.age, city = EXCLUDED.city, url = EXCLUDED.url";
 
-    let { city, url } = req.body;
-    let age = req.body.age.length > 0 ? (age = req.body.age.length) : (age = NULL);
+    let { city, url, age } = req.body;
 
     db
         .query(query, [age, city, url, req.session.user.id])

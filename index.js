@@ -34,6 +34,10 @@ app.use(
     }),
 );
 
+app.use("/styles", express.static(__dirname + "/styles"));
+app.use("/js", express.static(__dirname + "/js"));
+app.use("/assets", express.static(__dirname + "/assets"));
+
 app.get("/flash", function(req, res) {
     req.flash("info", "Flash is back!");
     res.redirect("/");

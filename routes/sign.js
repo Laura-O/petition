@@ -53,7 +53,26 @@ router.get("/signers", middleware.requireSigned, (req, res) => {
     db
         .query(query)
         .then(results => {
+            console.log(results.rows);
             res.render("petition-signers", {
+                user: req.session.user,
+                results: results.rows,
+            });
+        })
+        .catch(e => {
+            console.error("query error", e.message, e.stack);
+        });
+});
+
+router.get("/signers/:city", middleware.requireSigned, (req, res) => {
+    let query =
+        "SELECT * from users join signatures on users.id = signatures.user_id join user_profiles on users.id = user_profiles.user_id WHERE user_profiles.city = $1";
+
+    db
+        .query(query, [req.params.city])
+        .then(results => {
+            console.log(results);
+            res.render("petition-city", {
                 user: req.session.user,
                 results: results.rows,
             });
