@@ -304,3 +304,26 @@ h1 span:nth-child(3n) {
 h1 span:nth-child(4n) {
     color: #70bf42;
 }
+
+.table {
+    margin: 0 0 40px 0;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    display: table;
+    background: black;
+    color: white;
+}
+
+.table a {
+    padding: 0;
+    color: #00a2e0;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    padding: 6px 12px;
+    display: table-cell;
+}
