@@ -116,7 +116,6 @@ h1 {
     color: white;
     padding: 2em;
     max-width: 500px;
-    margin: 50px auto;
     border-radius: 5px;
 }
 
@@ -352,4 +351,27 @@ div.row.header {
 div.intro {
     font-size: 1.5em;
     margin: 10px 5px;
+}
+
+#princess-peach {
+    position: relative;
+    z-index: -1;
+    float: right;
+    top: -25px;
+    animation: move 5s infinite;
+}
+
+@keyframes move {
+    0% {
+        top: -25px;
+    }
+    20% {
+        top: 0px;
+    }
+    75% {
+        top: -20px;
+    }
+    100% {
+        top: -25px;
+    }
 }
