@@ -42,7 +42,7 @@ a:focus {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 20px 5px;
+    margin: 10px 5px;
 }
 
 section {
@@ -62,10 +62,14 @@ h1 {
 .message {
     align-self: center;
     width: 50%;
+    margin: 10px 0;
     max-width: 400px;
     border: solid 2px #f4145d;
-    background-color: white;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
     padding: 2px;
+    text-align: center;
 }
 
 #colored-title {

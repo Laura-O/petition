@@ -8,14 +8,20 @@ const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 
 router.get("/petition", csrfProtection, middleware.requireSession, function(req, res) {
-    var scripts = [{ script: "/js/main.js" }];
-    res.render("petition/sign", {
-        csrfToken: req.csrfToken(),
-        scripts: scripts,
-        user: req.session.user,
-        error: req.flash("error"),
-        info: req.flash("info"),
-    });
+    let scripts = [{ script: "/js/main.js" }];
+    console.log(req.session.user);
+    if (!req.session.user.signed) {
+        res.render("petition/sign", {
+            csrfToken: req.csrfToken(),
+            scripts: scripts,
+            user: req.session.user,
+            error: req.flash("error"),
+            info: req.flash("info"),
+        });
+    } else {
+        req.flash("info", "You have already signed our petition!");
+        res.redirect("/thanks");
+    }
 });
 
 router.post("/petition", parseForm, csrfProtection, function(req, res) {
@@ -33,17 +39,23 @@ router.post("/petition", parseForm, csrfProtection, function(req, res) {
 });
 
 router.get("/thanks", middleware.requireSigned, (req, res) => {
-    let query = "SELECT * FROM users join signatures on $1 = signatures.user_id";
+    let query =
+        "SELECT * FROM users LEFT JOIN signatures on users.id = signatures.user_id WHERE users.id = $1";
+
+    console.log("get thanks route: ", req.session.user);
 
     db
         .query(query, [req.session.user.id])
         .then(results => {
+            console.log("signature: ", results);
             res.render("petition/thanks", {
                 img: results.rows[0].signature,
                 user: {
                     first: req.session.user.first,
                     last: req.session.user.last,
                 },
+                error: req.flash("error"),
+                info: req.flash("info"),
             });
         })
         .catch(e => {
