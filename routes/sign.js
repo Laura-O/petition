@@ -5,7 +5,7 @@ const middleware = require("../middleware/index.js");
 
 router.get("/petition", middleware.requireSession, function(req, res) {
     var scripts = [{ script: "/js/main.js" }];
-    res.render("petition-sign", {
+    res.render("petition/sign", {
         scripts: scripts,
         user: req.session.user,
         error: req.flash("error"),
@@ -33,7 +33,7 @@ router.get("/thanks", middleware.requireSigned, (req, res) => {
     db
         .query(query, [req.session.user.id])
         .then(results => {
-            res.render("petition-thanks", {
+            res.render("petition/thanks", {
                 img: results.rows[0].signature,
                 user: {
                     first: req.session.user.first,
@@ -54,7 +54,7 @@ router.get("/signers", middleware.requireSigned, (req, res) => {
         .query(query)
         .then(results => {
             console.log(results.rows);
-            res.render("petition-signers", {
+            res.render("petition/signers", {
                 user: req.session.user,
                 results: results.rows,
             });
@@ -72,9 +72,10 @@ router.get("/signers/:city", middleware.requireSigned, (req, res) => {
         .query(query, [req.params.city])
         .then(results => {
             console.log(results);
-            res.render("petition-city", {
+            res.render("petition/signers-city", {
                 user: req.session.user,
                 results: results.rows,
+                city: req.params.city,
             });
         })
         .catch(e => {

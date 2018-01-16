@@ -5,7 +5,7 @@ const db = require("../models/db.js");
 const middleware = require("../middleware/index.js");
 
 router.get("/register", (req, res) => {
-    res.render("petition-register", {
+    res.render("user/register", {
         error: req.flash("error"),
         info: req.flash("info"),
     });
@@ -33,7 +33,7 @@ router.post("/register", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-    res.render("petition-login", {
+    res.render("user/login", {
         user: req.session.user,
     });
 });

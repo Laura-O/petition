@@ -10,7 +10,7 @@ router.get("/profile", middleware.requireSession, function(req, res) {
         .query(query, [req.session.user.id])
         .then(results => {
             if (results.rows.length > 0) {
-                res.render("petition-profile", {
+                res.render("user/profile", {
                     user: req.session.user,
                     age: results.rows[0].age,
                     city: results.rows[0].city,
@@ -19,7 +19,7 @@ router.get("/profile", middleware.requireSession, function(req, res) {
                     info: req.flash("info"),
                 });
             } else {
-                res.render("petition-profile", {
+                res.render("user/profile", {
                     user: req.session.user,
                     error: req.flash("error"),
                     info: req.flash("info"),
@@ -41,6 +41,19 @@ router.post("/profile", middleware.requireSession, function(req, res) {
         .query(query, [age, city, url, req.session.user.id])
         .then(results => {
             res.redirect("/petition");
+        })
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
+        });
+});
+
+router.get("/profile/edit", middleware.requireSession, function(req, res) {
+    let query = "SELECT * FROM user_profiles WHERE user_id = $1";
+
+    db
+        .query(query, [req.session.user.id])
+        .then(results => {
+            console.log(results);
         })
         .catch(err => {
             console.error("query error", err.message, err.stack);
