@@ -1,10 +1,11 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 const flash = require("connect-flash");
+const csrf = require("csurf");
+const bodyParser = require("body-parser");
 
 const db = require("./models/db.js");
 
@@ -12,6 +13,9 @@ const authRoutes = require("./routes/auth.js");
 const petitionRoutes = require("./routes/sign.js");
 const indexRoutes = require("./routes/index.js");
 const userRoutes = require("./routes/user.js");
+
+var csrfProtection = csrf({ cookie: true });
+var parseForm = bodyParser.urlencoded({ extended: false });
 
 let hbs = exphbs.create({
     defaultLayout: "main",

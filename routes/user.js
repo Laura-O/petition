@@ -2,8 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
 const middleware = require("../middleware/index.js");
+const csrf = require("csurf");
+const bodyParser = require("body-parser");
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
 
-router.get("/profile", middleware.requireSession, function(req, res) {
+router.get("/profile", csrfProtection, middleware.requireSession, function(req, res) {
     let query = "SELECT * FROM user_profiles WHERE user_id = $1";
 
     db
@@ -11,6 +15,7 @@ router.get("/profile", middleware.requireSession, function(req, res) {
         .then(results => {
             if (results.rows.length > 0) {
                 res.render("user/profile", {
+                    csrfToken: req.csrfToken(),
                     user: req.session.user,
                     age: results.rows[0].age,
                     city: results.rows[0].city,
@@ -20,6 +25,7 @@ router.get("/profile", middleware.requireSession, function(req, res) {
                 });
             } else {
                 res.render("user/profile", {
+                    csrfToken: req.csrfToken(),
                     user: req.session.user,
                     error: req.flash("error"),
                     info: req.flash("info"),
@@ -31,7 +37,7 @@ router.get("/profile", middleware.requireSession, function(req, res) {
         });
 });
 
-router.post("/profile", middleware.requireSession, function(req, res) {
+router.post("/profile", parseForm, csrfProtection, middleware.requireSession, function(req, res) {
     let query =
         "INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id, age = EXCLUDED.age, city = EXCLUDED.city, url = EXCLUDED.url";
 
@@ -39,7 +45,7 @@ router.post("/profile", middleware.requireSession, function(req, res) {
 
     db
         .query(query, [age, city, url, req.session.user.id])
-        .then(results => {
+        .then(() => {
             res.redirect("/petition");
         })
         .catch(err => {
@@ -47,17 +53,18 @@ router.post("/profile", middleware.requireSession, function(req, res) {
         });
 });
 
-router.get("/profile/edit", middleware.requireSession, function(req, res) {
-    let query = "SELECT * FROM user_profiles WHERE user_id = $1";
+// router.get("/profile/edit", middleware.requireSession, function(req, res) {
+//     let query =
+//         "SELECT * FROM user_profiles join user_profiles on users.id = user_profiles.user_id WHERE user_id = $1";
 
-    db
-        .query(query, [req.session.user.id])
-        .then(results => {
-            console.log(results);
-        })
-        .catch(err => {
-            console.error("query error", err.message, err.stack);
-        });
-});
+//     db
+//         .query(query, [req.session.user.id])
+//         .then(results => {
+//             console.log(results);
+//         })
+//         .catch(err => {
+//             console.error("query error", err.message, err.stack);
+//         });
+// });
 
 module.exports = router;

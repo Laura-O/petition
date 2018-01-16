@@ -68,6 +68,10 @@ h1 {
     padding: 2px;
 }
 
+#colored-title {
+    text-align: center;
+}
+
 #colored-title span {
     margin-left: -5px;
 }
@@ -289,19 +293,19 @@ input[type="submit"] {
     padding: 20px 10px;
 }
 
-h1 span:nth-child(1n) {
+h1 span.color:nth-child(1n) {
     color: #f4145d;
 }
 
-h1 span:nth-child(2n) {
+h1 span.color:nth-child(2n) {
     color: #00a2e0;
 }
 
-h1 span:nth-child(3n) {
+h1 span.color:nth-child(3n) {
     color: #ffdd03;
 }
 
-h1 span:nth-child(4n) {
+h1 span.color:nth-child(4n) {
     color: #70bf42;
 }
 
@@ -326,4 +330,22 @@ h1 span:nth-child(4n) {
 .cell {
     padding: 6px 12px;
     display: table-cell;
+}
+
+span.space {
+    margin-right: 5px;
+}
+
+span#first {
+    margin-left: 10px;
+}
+
+div.row.header {
+    font-size: 1.2em;
+    margin: 5px;
+}
+
+div.intro {
+    font-size: 1.5em;
+    margin: 10px 5px;
 }

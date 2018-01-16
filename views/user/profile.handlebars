@@ -1,6 +1,7 @@
 <body>
     <div class="container">
         <form class="form" id="info-form" method="POST">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <p>
                 <label for="age">Age</label>
                 <input type="number" name="age" value={{age}}>

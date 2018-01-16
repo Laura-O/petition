@@ -2,10 +2,15 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
 const middleware = require("../middleware/index.js");
+const csrf = require("csurf");
+const bodyParser = require("body-parser");
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
 
-router.get("/petition", middleware.requireSession, function(req, res) {
+router.get("/petition", csrfProtection, middleware.requireSession, function(req, res) {
     var scripts = [{ script: "/js/main.js" }];
     res.render("petition/sign", {
+        csrfToken: req.csrfToken(),
         scripts: scripts,
         user: req.session.user,
         error: req.flash("error"),
@@ -13,12 +18,12 @@ router.get("/petition", middleware.requireSession, function(req, res) {
     });
 });
 
-router.post("/petition", function(req, res) {
+router.post("/petition", parseForm, csrfProtection, function(req, res) {
     let query = "INSERT INTO signatures (signature, user_id) VALUES ($1, $2)";
 
     db
         .query(query, [req.body.hiddensig, req.session.user.id])
-        .then(results => {
+        .then(() => {
             req.session.user.signed = true;
             res.redirect("/thanks");
         })

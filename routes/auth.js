@@ -2,16 +2,20 @@ const express = require("express");
 const router = express.Router();
 const user = require("../models/user.js");
 const db = require("../models/db.js");
-const middleware = require("../middleware/index.js");
+const csrf = require("csurf");
+const bodyParser = require("body-parser");
+const csrfProtection = csrf({ cookie: true });
+const parseForm = bodyParser.urlencoded({ extended: false });
 
-router.get("/register", (req, res) => {
+router.get("/register", csrfProtection, (req, res) => {
     res.render("user/register", {
+        csrfToken: req.csrfToken(),
         error: req.flash("error"),
         info: req.flash("info"),
     });
 });
 
-router.post("/register", (req, res) => {
+router.post("/register", parseForm, csrfProtection, (req, res) => {
     let query = "INSERT INTO users (first, last, email, pass) VALUES ($1, $2, $3, $4) RETURNING id";
 
     user.hashPassword(req.body.password).then(password => {
@@ -32,13 +36,14 @@ router.post("/register", (req, res) => {
     });
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", csrfProtection, (req, res) => {
     res.render("user/login", {
+        csrfToken: req.csrfToken(),
         user: req.session.user,
     });
 });
 
-router.post("/login", (req, res) => {
+router.post("/login", csrfProtection, (req, res) => {
     const { email, password } = req.body;
     let query = "SELECT pass, id FROM users WHERE email = $1";
 
