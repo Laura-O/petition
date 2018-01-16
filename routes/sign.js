@@ -7,9 +7,9 @@ const bodyParser = require("body-parser");
 const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 
-router.get("/petition", csrfProtection, middleware.requireSession, function(req, res) {
+router.get("/petition", csrfProtection, middleware.requireSession, (req, res) => {
     let scripts = [{ script: "/js/main.js" }];
-    console.log(req.session.user);
+
     if (!req.session.user.signed) {
         res.render("petition/sign", {
             csrfToken: req.csrfToken(),
@@ -24,7 +24,7 @@ router.get("/petition", csrfProtection, middleware.requireSession, function(req,
     }
 });
 
-router.post("/petition", parseForm, csrfProtection, function(req, res) {
+router.post("/petition", parseForm, csrfProtection, (req, res) => {
     let query = "INSERT INTO signatures (signature, user_id) VALUES ($1, $2)";
 
     db
@@ -52,7 +52,6 @@ router.get("/thanks", middleware.requireSigned, (req, res) => {
                 img: results.rows[0].signature,
                 user: {
                     first: req.session.user.first,
-                    last: req.session.user.last,
                 },
                 error: req.flash("error"),
                 info: req.flash("info"),

@@ -1,4 +1,3 @@
-const pg = require("pg");
 const Pool = require("pg-pool");
 
 const config = {
@@ -8,13 +7,12 @@ const config = {
 };
 
 const pool = new Pool(config);
-pool.on("error", function(err) {
+pool.on("error", err => {
     console.log(err);
 });
 
-const query = function(sql, params) {
-    console.log(params);
-    return new Promise(function(resolve, reject) {
+const query = (sql, params) => {
+    return new Promise((resolve, reject) => {
         pool.connect().then(client => {
             client
                 .query(sql, params)

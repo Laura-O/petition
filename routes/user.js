@@ -1,70 +1,98 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
+const user = require("../models/user.js");
 const middleware = require("../middleware/index.js");
 const csrf = require("csurf");
 const bodyParser = require("body-parser");
 const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 
-router.get("/profile", csrfProtection, middleware.requireSession, function(req, res) {
+router.get("/profile", csrfProtection, middleware.requireSession, (req, res) => {
     let query = "SELECT * FROM user_profiles WHERE user_id = $1";
 
     db
         .query(query, [req.session.user.id])
         .then(results => {
-            if (results.rows.length > 0) {
-                res.render("user/profile", {
-                    csrfToken: req.csrfToken(),
-                    user: req.session.user,
-                    age: results.rows[0].age,
-                    city: results.rows[0].city,
-                    url: results.rows[0].url,
-                    error: req.flash("error"),
-                    info: req.flash("info"),
-                });
-            } else {
-                res.render("user/profile", {
-                    csrfToken: req.csrfToken(),
-                    user: req.session.user,
-                    error: req.flash("error"),
-                    info: req.flash("info"),
-                });
-            }
+            res.render("user/profile", {
+                csrfToken: req.csrfToken(),
+                user: results.rows[0],
+                error: req.flash("error"),
+                info: req.flash("info"),
+            });
         })
         .catch(err => {
             console.error("query error", err.message, err.stack);
         });
 });
 
-router.post("/profile", parseForm, csrfProtection, middleware.requireSession, function(req, res) {
-    let query =
-        "INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id, age = EXCLUDED.age, city = EXCLUDED.city, url = EXCLUDED.url";
+router.post("/profile", parseForm, csrfProtection, middleware.requireSession, (req, res) => {
+    let city = req.body.city || null;
+    let age = req.body.age || null;
+    let url = req.body.url || null;
 
-    let { city, url, age } = req.body;
-
-    db
-        .query(query, [age, city, url, req.session.user.id])
+    user
+        .updateProfile(age, city, url, req.session.user.id)
         .then(() => {
             res.redirect("/petition");
         })
         .catch(err => {
             console.error("query error", err.message, err.stack);
+            req.flash("error", "An error has occured.");
+            res.redirect("/profile");
         });
 });
 
-// router.get("/profile/edit", middleware.requireSession, function(req, res) {
-//     let query =
-//         "SELECT * FROM user_profiles join user_profiles on users.id = user_profiles.user_id WHERE user_id = $1";
+router.get("/profile/edit", csrfProtection, middleware.requireSession, (req, res) => {
+    let query =
+        "SELECT first, last, email, age, city, url, pass FROM users join user_profiles on users.id = user_profiles.user_id WHERE user_id = $1";
 
-//     db
-//         .query(query, [req.session.user.id])
-//         .then(results => {
-//             console.log(results);
-//         })
-//         .catch(err => {
-//             console.error("query error", err.message, err.stack);
-//         });
-// });
+    db
+        .query(query, [req.session.user.id])
+        .then(results => {
+            console.log(results.rows[0]);
+            res.render("user/edit", {
+                csrfToken: req.csrfToken(),
+                user: results.rows[0],
+                error: req.flash("error"),
+                info: req.flash("info"),
+            });
+        })
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
+        });
+});
+
+router.post("/profile/edit", parseForm, csrfProtection, middleware.requireSession, (req, res) => {
+    let { first, last, email } = req.body;
+
+    if (!(first && last && email)) {
+        return res.redirect("/profile/edit");
+    }
+
+    let city = req.body.city || null;
+    let age = req.body.age || null;
+    let url = req.body.url || null;
+
+    user
+        .updateUser(first, last, email, req.session.user.id)
+        .then(() => {
+            user
+                .updateProfile(age, city, url, req.session.user.id)
+                .then(() => {
+                    res.redirect("/petition");
+                })
+                .catch(err => {
+                    console.error("query error", err.message, err.stack);
+                    req.flash("error", "An error has occured.");
+                    res.redirect("/profile");
+                });
+        })
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
+            req.flash("error", "An error has occured.");
+            res.redirect("/profile");
+        });
+});
 
 module.exports = router;

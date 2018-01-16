@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/", function(req, res) {
+router.get("/", (req, res) => {
     res.render("main", {
         user: req.session.user,
         error: req.flash("error"),
@@ -9,10 +9,7 @@ router.get("/", function(req, res) {
     });
 });
 
-router.get("/clearcookie", function(req, res) {
-    res.clearCookie("signed");
-    res.clearCookie("session");
-    res.clearCookie("session.sig");
+router.get("/clearcookie", (req, res) => {
     req.session = null;
     res.send("Cookie deleted");
 });

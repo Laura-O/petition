@@ -42,7 +42,7 @@ app.use("/styles", express.static(__dirname + "/styles"));
 app.use("/js", express.static(__dirname + "/js"));
 app.use("/assets", express.static(__dirname + "/assets"));
 
-app.get("/flash", function(req, res) {
+app.get("/flash", (req, res) => {
     req.flash("info", "Flash is back!");
     res.redirect("/");
 });
@@ -52,6 +52,6 @@ app.use(petitionRoutes);
 app.use(indexRoutes);
 app.use(userRoutes);
 
-app.listen(8080, function() {
+app.listen(process.env.PORT || 8080, () => {
     console.log("Listening on 8080");
 });

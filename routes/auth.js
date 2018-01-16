@@ -22,21 +22,27 @@ router.get("/register", csrfProtection, (req, res) => {
 
 router.post("/register", parseForm, csrfProtection, (req, res) => {
     let query = "INSERT INTO users (first, last, email, pass) VALUES ($1, $2, $3, $4) RETURNING id";
+    const { first, last, email, password } = req.body;
 
-    user.hashPassword(req.body.password).then(password => {
+    if (!(first && last && email && password)) {
+        req.flash("error", "Plase fill out all fields!");
+        return res.redirect("/register");
+    }
+
+    user.hashPassword(password).then(hashedPassword => {
         db
-            .query(query, [req.body.first, req.body.last, req.body.email, password])
+            .query(query, [first, last, email, hashedPassword])
             .then(results => {
                 req.session.user = {
                     id: results.rows[0].id,
-                    first: req.body.first,
-                    last: req.body.last,
-                    email: req.body.email,
+                    first: first,
                 };
                 res.redirect("/profile");
             })
             .catch(err => {
                 console.error("query error", err.message, err.stack);
+                req.flash("error", "An user with this email address already exists!");
+                return res.redirect("/register");
             });
     });
 });
@@ -54,8 +60,13 @@ router.get("/login", csrfProtection, (req, res) => {
 });
 
 router.post("/login", csrfProtection, (req, res) => {
-    const { email, password } = req.body;
     let query = "SELECT * FROM users WHERE email = $1";
+    const { email, password } = req.body;
+
+    if (!(email && password)) {
+        req.flash("error", "Plase enter email address and password!");
+        return res.redirect("/login");
+    }
 
     db
         .query(query, [email])
