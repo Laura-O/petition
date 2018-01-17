@@ -38,7 +38,21 @@ router.post("/petition", parseForm, csrfProtection, (req, res) => {
         });
 });
 
-router.get("/thanks", middleware.requireSigned, (req, res) => {
+router.post("/delete", csrfProtection, (req, res) => {
+    let query = "DELETE FROM signatures WHERE user_id = $1";
+
+    db
+        .query(query, [req.session.user.id])
+        .then(() => {
+            req.session.user.signed = null;
+            res.redirect("/petition");
+        })
+        .catch(err => {
+            console.log("query error", err.message, err.stack);
+        });
+});
+
+router.get("/thanks", csrfProtection, middleware.requireSigned, (req, res) => {
     let query =
         "SELECT * FROM users LEFT JOIN signatures on users.id = signatures.user_id WHERE users.id = $1";
 
@@ -49,6 +63,7 @@ router.get("/thanks", middleware.requireSigned, (req, res) => {
         .then(results => {
             console.log("signature: ", results);
             res.render("petition/thanks", {
+                csrfToken: req.csrfToken(),
                 img: results.rows[0].signature,
                 user: {
                     first: req.session.user.first,
