@@ -1,7 +1,7 @@
 const Pool = require("pg-pool");
 const url = require("url");
 
-const params = url.parse(process.env.DATABASE_URL);
+const params = url.parse(process.env.DATABASE_URL || "postgres://:@localhost:5432/petition");
 const auth = params.auth.split(":");
 
 const config = {
@@ -13,10 +13,12 @@ const config = {
     ssl: true
 };
 
+// console.log(config);
+
 // const config = {
 //     host: "localhost",
 //     port: 5432,
-//     database: "petition",
+//     database: "petition"
 // };
 
 const pool = new Pool(config);

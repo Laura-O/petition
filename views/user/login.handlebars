@@ -2,10 +2,14 @@
     <div class="container">
         <form class="form" method="POST">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <label for="email">Email address</label>
-            <input type="text" name="email" id="email">
-            <label for="password">Password</label>
-            <input type="password" name="password">
-            <button id="submit" type="submit" value="Login">Login</button>
+            <p>
+                <label for="email">Email address</label>
+                <input type="text" name="email" id="email">
+            </p>
+            <p>
+                <label for="password">Password</label>
+                <input type="password" name="password">
+            </p>
+            <input id="submit" type="submit" value="Login">
         </form>
     </div>

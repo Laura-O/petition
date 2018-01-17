@@ -1,8 +1,10 @@
 <body>
     <div class="container">
-        <div>Thanks for signing, {{user.first}}!</div>
-        <div id="signature">
-            <img src="{{img}}">
+        <div id="thanks-box">
+            <div id="thanks-message">Thanks for signing, {{user.first}}!</div>
+            <div id="signature">
+                <img src="{{img}}">
+            </div>
         </div>
         <div>
             <a href="/signers">See all {{number}} signers</a>
@@ -13,7 +15,7 @@
         <div>
             <form action="/delete" method="post">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <input type="submit" name="delete" value="Delete signature" />
+                <input type="submit" id="delete-button" name="delete" value="Delete signature" />
             </form>
         </div>
     </div>

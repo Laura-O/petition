@@ -16,7 +16,7 @@ router.get("/petition", csrfProtection, middleware.requireSession, (req, res) =>
             scripts: scripts,
             user: req.session.user,
             error: req.flash("error"),
-            info: req.flash("info"),
+            info: req.flash("info")
         });
     } else {
         req.flash("info", "You have already signed our petition!");
@@ -63,10 +63,10 @@ router.get("/thanks", csrfProtection, middleware.requireSigned, (req, res) => {
                 csrfToken: req.csrfToken(),
                 img: results.rows[0].signature,
                 user: {
-                    first: req.session.user.first,
+                    first: req.session.user.first
                 },
                 error: req.flash("error"),
-                info: req.flash("info"),
+                info: req.flash("info")
             });
         })
         .catch(e => {
@@ -84,7 +84,7 @@ router.get("/signers", middleware.requireSigned, (req, res) => {
             console.log(results.rows);
             res.render("petition/signers", {
                 user: req.session.user,
-                results: results.rows,
+                results: results.rows
             });
         })
         .catch(e => {
@@ -99,11 +99,10 @@ router.get("/signers/:city", middleware.requireSigned, (req, res) => {
     db
         .query(query, [req.params.city])
         .then(results => {
-            console.log(results);
             res.render("petition/signers-city", {
                 user: req.session.user,
                 results: results.rows,
-                city: req.params.city,
+                city: req.params.city
             });
         })
         .catch(e => {
