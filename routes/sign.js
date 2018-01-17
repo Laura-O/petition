@@ -56,12 +56,9 @@ router.get("/thanks", csrfProtection, middleware.requireSigned, (req, res) => {
     let query =
         "SELECT * FROM users LEFT JOIN signatures on users.id = signatures.user_id WHERE users.id = $1";
 
-    console.log("get thanks route: ", req.session.user);
-
     db
         .query(query, [req.session.user.id])
         .then(results => {
-            console.log("signature: ", results);
             res.render("petition/thanks", {
                 csrfToken: req.csrfToken(),
                 img: results.rows[0].signature,

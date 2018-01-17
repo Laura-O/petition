@@ -19,7 +19,7 @@ var parseForm = bodyParser.urlencoded({ extended: false });
 
 let hbs = exphbs.create({
     defaultLayout: "main",
-    helpers: {},
+    helpers: {}
 });
 
 const app = express();
@@ -33,9 +33,9 @@ app.use(flash());
 
 app.use(
     cookieSession({
-        secret: "very secret string",
-        maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    }),
+        name: "session",
+        keys: ["key1", "key2"]
+    })
 );
 
 app.use("/styles", express.static(__dirname + "/styles"));

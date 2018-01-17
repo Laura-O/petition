@@ -50,7 +50,6 @@ router.get("/profile/edit", csrfProtection, middleware.requireSession, (req, res
     db
         .query(query, [req.session.user.id])
         .then(results => {
-            console.log(results.rows[0]);
             res.render("user/edit", {
                 csrfToken: req.csrfToken(),
                 user: results.rows[0],
@@ -67,15 +66,17 @@ router.post("/profile/edit", parseForm, csrfProtection, middleware.requireSessio
     let { first, last, email } = req.body;
 
     if (!(first && last && email)) {
+        req.flash("error", "Please enter all required fields!");
         return res.redirect("/profile/edit");
     }
 
     let city = req.body.city || null;
     let age = req.body.age || null;
     let url = req.body.url || null;
+    let pass = req.body.pass || null;
 
     user
-        .updateUser(first, last, email, req.session.user.id)
+        .updateUser(first, last, email, req.session.user.id, pass)
         .then(() => {
             user
                 .updateProfile(age, city, url, req.session.user.id)

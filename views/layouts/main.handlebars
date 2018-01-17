@@ -14,9 +14,9 @@
 <html>
 <div class="outer-wrapper">
     {{> header}} {{#if info}}
-    <div class="message">{{ info }}</div>
+    <div class="message info">{{ info }}</div>
     {{/if}} {{#if error}}
-    <div class="message">{{ error }}</div>
+    <div class="message error">{{ error }}</div>
     {{/if}} {{{body}}} {{> footer}}
 </div>
 

@@ -61,21 +61,45 @@ function updateProfile(age, city, url, userId) {
     });
 }
 
-function updateUser(first, last, email, user_id) {
-    console.log("update user: ", first, last, email, user_id);
-    return new Promise((resolve, reject) => {
-        let query = "UPDATE users SET first=$1, last=$2, email=$3 WHERE id=$4";
+function updateUser(first, last, email, user_id, pass) {
+    console.log("update user: ", first, last, email, user_id, pass);
 
-        db
-            .query(query, [first, last, email, user_id])
-            .then(() => {
-                resolve();
+    let query = "";
+    let values = [first, last, email, user_id];
+
+    let prom;
+
+    if (pass) {
+        console.log("change password");
+        query = "UPDATE users SET first=$1, last=$2, email=$3, pass=$5 WHERE id=$4";
+        prom = hashPassword(pass)
+            .then(hashedPassword => {
+                values.push(hashedPassword);
             })
             .catch(err => {
-                console.error("query error", err.message, err.stack);
-                reject(err);
+                console.log(err);
             });
-    });
+    } else {
+        console.log("do not change password");
+        query = "UPDATE users SET first=$1, last=$2, email=$3 WHERE id=$4";
+        values = [first, last, email, user_id];
+        prom = Promise.resolve(undefined);
+    }
+
+    return prom
+        .then(() => {
+            db
+                .query(query, values)
+                .then(result => {
+                    console.log(result);
+                })
+                .catch(err => {
+                    console.error("query error", err.message, err.stack);
+                });
+        })
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
+        });
 }
 
 module.exports = {

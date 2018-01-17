@@ -1,10 +1,23 @@
 const Pool = require("pg-pool");
+const url = require("url");
+
+const params = url.parse(process.env.DATABASE_URL);
+const auth = params.auth.split(":");
 
 const config = {
-    host: "localhost",
-    port: 5432,
-    database: "petition",
+    user: auth[0],
+    password: auth[1],
+    host: params.hostname,
+    port: params.port,
+    database: params.pathname.split("/")[1],
+    ssl: true
 };
+
+// const config = {
+//     host: "localhost",
+//     port: 5432,
+//     database: "petition",
+// };
 
 const pool = new Pool(config);
 pool.on("error", err => {
@@ -31,5 +44,5 @@ const query = (sql, params) => {
 
 module.exports = {
     query: query,
-    pool: pool,
+    pool: pool
 };
