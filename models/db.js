@@ -13,7 +13,7 @@ const config = {
     ssl: true
 };
 
-// console.log(config);
+console.log(config);
 
 // const config = {
 //     host: "localhost",

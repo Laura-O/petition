@@ -81,7 +81,6 @@ router.get("/signers", middleware.requireSigned, (req, res) => {
     db
         .query(query)
         .then(results => {
-            console.log(results.rows);
             res.render("petition/signers", {
                 user: req.session.user,
                 results: results.rows

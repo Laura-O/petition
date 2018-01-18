@@ -48,7 +48,6 @@ router.post("/register", parseForm, csrfProtection, (req, res) => {
 });
 
 router.get("/login", csrfProtection, (req, res) => {
-    // console.log("Login user session: ", req.session.user);
     if (!req.session.user) {
         res.render("user/login", {
             csrfToken: req.csrfToken(),

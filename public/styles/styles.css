@@ -150,6 +150,11 @@ h1 {
     cursor: pointer;
     outline: none;
     font-size: 1.5em;
+    max-width: 100px;
+}
+
+.form input[type="submit"]:hover {
+    border: 1px solid #f4145d;
 }
 
 .form input:focus {
@@ -173,7 +178,7 @@ header {
 }
 
 footer {
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
@@ -209,7 +214,7 @@ footer {
 }
 
 #signers {
-    width: 50%;
+    width: 100%;
 }
 
 @media all and (max-width: 768px) {
@@ -403,4 +408,20 @@ div.intro {
     color: white;
     padding: 10px;
     text-align: center;
+}
+
+.non-button {
+    background: black;
+    color: white;
+    border: 1px solid;
+    font: inherit;
+    line-height: 1;
+    margin: 0.5em;
+    transition: all 0.3s;
+    padding: 5px 10px;
+}
+
+.non-button:hover {
+    border: 1px solid #f4145d;
+    border-radius: 10px;
 }

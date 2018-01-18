@@ -62,15 +62,11 @@ function updateProfile(age, city, url, userId) {
 }
 
 function updateUser(first, last, email, user_id, pass) {
-    console.log("update user: ", first, last, email, user_id, pass);
-
     let query = "";
     let values = [first, last, email, user_id];
-
     let prom;
 
     if (pass) {
-        console.log("change password");
         query = "UPDATE users SET first=$1, last=$2, email=$3, pass=$5 WHERE id=$4";
         prom = hashPassword(pass)
             .then(hashedPassword => {
@@ -80,7 +76,6 @@ function updateUser(first, last, email, user_id, pass) {
                 console.log(err);
             });
     } else {
-        console.log("do not change password");
         query = "UPDATE users SET first=$1, last=$2, email=$3 WHERE id=$4";
         values = [first, last, email, user_id];
         prom = Promise.resolve(undefined);
@@ -107,5 +102,5 @@ module.exports = {
     checkPassword: checkPassword,
     checkSigned: checkSigned,
     updateProfile: updateProfile,
-    updateUser: updateUser,
+    updateUser: updateUser
 };
