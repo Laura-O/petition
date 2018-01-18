@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models/db.js");
+const user = require("../models/user.js");
+const redis = require("../middleware/redis.js");
 const middleware = require("../middleware/index.js");
 const csrf = require("csurf");
 const bodyParser = require("body-parser");
@@ -31,6 +33,7 @@ router.post("/petition", parseForm, csrfProtection, (req, res) => {
         .query(query, [req.body.hiddensig, req.session.user.id])
         .then(() => {
             req.session.user.signed = true;
+            redis.del("signers");
             res.redirect("/thanks");
         })
         .catch(err => {
@@ -75,20 +78,16 @@ router.get("/thanks", csrfProtection, middleware.requireSigned, (req, res) => {
 });
 
 router.get("/signers", middleware.requireSigned, (req, res) => {
-    let query =
-        "SELECT first, last, age, city, url from users join signatures on users.id = signatures.user_id join user_profiles on users.id = user_profiles.user_id";
-
-    db
-        .query(query)
+    user
+        .getSigners()
         .then(results => {
-            console.log(results.rows);
             res.render("petition/signers", {
                 user: req.session.user,
                 results: results.rows
             });
         })
-        .catch(e => {
-            console.error("query error", e.message, e.stack);
+        .catch(err => {
+            console.log(err);
         });
 });
 

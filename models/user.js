@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const db = require("../models/db.js");
+const redis = require("../middleware/redis.js");
 
 function hashPassword(plainTextPassword) {
     return new Promise((resolve, reject) => {
@@ -103,10 +104,35 @@ function updateUser(first, last, email, user_id, pass) {
         });
 }
 
+function getSigners() {
+    return new Promise((resolve, reject) => {
+        let query =
+            "SELECT first, last, age, city, url from users join signatures on users.id = signatures.user_id join user_profiles on users.id = user_profiles.user_id";
+
+        redis.get("signers").then(signers => {
+            if (signers) {
+                resolve(JSON.parse(signers));
+            } else {
+                db
+                    .query(query)
+                    .then(results => {
+                        redis.set("signers", JSON.stringify(results));
+                        resolve(results);
+                    })
+                    .catch(err => {
+                        console.error("query error", err.message, err.stack);
+                        reject(err);
+                    });
+            }
+        });
+    });
+}
+
 module.exports = {
-    hashPassword: hashPassword,
-    checkPassword: checkPassword,
-    checkSigned: checkSigned,
-    updateProfile: updateProfile,
-    updateUser: updateUser
+    hashPassword,
+    checkPassword,
+    checkSigned,
+    updateProfile,
+    updateUser,
+    getSigners
 };
