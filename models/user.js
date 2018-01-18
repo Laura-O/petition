@@ -45,6 +45,7 @@ function checkSigned(userId) {
 }
 
 function updateProfile(age, city, url, userId) {
+    console.log(userId);
     return new Promise((resolve, reject) => {
         let query =
             "INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id, age = EXCLUDED.age, city = EXCLUDED.city, url = EXCLUDED.url";
@@ -107,5 +108,5 @@ module.exports = {
     checkPassword: checkPassword,
     checkSigned: checkSigned,
     updateProfile: updateProfile,
-    updateUser: updateUser,
+    updateUser: updateUser
 };
