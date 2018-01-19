@@ -58,6 +58,11 @@ $(document).ready(function() {
         }
     }
 
+    /**
+     * When submit button is clicked:
+     * 1. make signature drawn on canvas a data URI
+     * 2. set the value of the hidden input field
+     */
     $("#submit").on("click", function(e) {
         let signature = document.getElementById("canvas").toDataURL();
         document.getElementById("hiddensig").value = signature;

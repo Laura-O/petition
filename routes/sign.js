@@ -10,7 +10,8 @@ const csrfProtection = csrf({ cookie: true });
 const parseForm = bodyParser.urlencoded({ extended: false });
 
 router.get("/petition", csrfProtection, middleware.requireSession, (req, res) => {
-    let scripts = [{ script: "/js/main.js" }];
+    // Pass canvas JS script for signature field
+    let scripts = [{ script: "/js/canvas.js" }];
 
     if (!req.session.user.signed) {
         res.render("petition/sign", {
@@ -33,6 +34,8 @@ router.post("/petition", parseForm, csrfProtection, (req, res) => {
         .query(query, [req.body.hiddensig, req.session.user.id])
         .then(() => {
             req.session.user.signed = true;
+
+            // Clear list of signers when new signer was added to db
             redis.del("signers");
             res.redirect("/thanks");
         })
@@ -51,7 +54,7 @@ router.post("/delete", csrfProtection, (req, res) => {
             res.redirect("/petition");
         })
         .catch(err => {
-            console.log("query error", err.message, err.stack);
+            console.error("query error", err.message, err.stack);
         });
 });
 
@@ -72,8 +75,8 @@ router.get("/thanks", csrfProtection, middleware.requireSigned, (req, res) => {
                 info: req.flash("info")
             });
         })
-        .catch(e => {
-            console.error("query error", e.message, e.stack);
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
         });
 });
 
@@ -87,7 +90,7 @@ router.get("/signers", middleware.requireSigned, (req, res) => {
             });
         })
         .catch(err => {
-            console.log(err);
+            console.error("query error", err.message, err.stack);
         });
 });
 
@@ -104,8 +107,8 @@ router.get("/signers/:city", middleware.requireSigned, (req, res) => {
                 city: req.params.city
             });
         })
-        .catch(e => {
-            console.error("query error", e.message, e.stack);
+        .catch(err => {
+            console.error("query error", err.message, err.stack);
         });
 });
 

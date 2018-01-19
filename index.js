@@ -3,10 +3,13 @@ const exphbs = require("express-handlebars");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const bodyParser = require("body-parser");
+
+// routes
 const authRoutes = require("./routes/auth.js");
 const petitionRoutes = require("./routes/sign.js");
 const indexRoutes = require("./routes/index.js");
 const userRoutes = require("./routes/user.js");
+
 const session = require("express-session");
 const Store = require("connect-redis")(session);
 
@@ -18,7 +21,6 @@ let hbs = exphbs.create({
 const app = express();
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
-app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -37,7 +39,6 @@ if (process.env.REDIS_URL) {
     };
 }
 
-app.use(cookieParser());
 app.use(
     session({
         store: new Store(store),
@@ -47,10 +48,13 @@ app.use(
     })
 );
 
+// static routes for public folder and subfolders
+app.use(express.static("public"));
 app.use("/styles", express.static(__dirname + "/styles"));
 app.use("/js", express.static(__dirname + "/js"));
 app.use("/assets", express.static(__dirname + "/assets"));
 
+// use connect-flash for flashy messages
 app.get("/flash", (req, res) => {
     req.flash("info", "Flash is back!");
     res.redirect("/");

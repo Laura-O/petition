@@ -1,3 +1,4 @@
+// check if a user-session exists
 function requireSession(req, res, next) {
     if (!req.session.user) {
         req.flash("info", "You have to register first!");
@@ -7,6 +8,7 @@ function requireSession(req, res, next) {
     }
 }
 
+// check if the user has signed the petition
 function requireSigned(req, res, next) {
     if (req.session.user) {
         if (req.session.user.signed) {
@@ -23,5 +25,5 @@ function requireSigned(req, res, next) {
 
 module.exports = {
     requireSession,
-    requireSigned,
+    requireSigned
 };

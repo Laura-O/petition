@@ -9,8 +9,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/clearcookie", (req, res) => {
-    req.session = null;
+// Removes session, only for development
+router.get("/clearsession", (req, res) => {
+    req.session.destroy();
     res.send("Cookie deleted");
 });
 

@@ -1,6 +1,7 @@
 const Pool = require("pg-pool");
-const url = require("url");
 
+// TODO: make this work for Heroku & localhost without (un)commenting
+const url = require("url");
 const params = url.parse(
     process.env.DATABASE_URL || "postgres://petition:petition@localhost:5432/petition"
 );
@@ -28,6 +29,11 @@ pool.on("error", err => {
     console.log(err);
 });
 
+/**
+ * Generic method for db queries
+ * @param sql SQL query
+ * @param params array with parameters
+ */
 const query = (sql, params) => {
     return new Promise((resolve, reject) => {
         pool.connect().then(client => {

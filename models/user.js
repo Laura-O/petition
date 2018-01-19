@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const db = require("../models/db.js");
 const redis = require("../middleware/redis.js");
 
+// hashPassword() hashes a plain password and returns it
 function hashPassword(plainTextPassword) {
     return new Promise((resolve, reject) => {
         bcrypt.genSalt((err, salt) => {
@@ -18,6 +19,11 @@ function hashPassword(plainTextPassword) {
     });
 }
 
+/**
+ * checkPassword() checks if both passed-in passwords match
+ * @param textenterdInLoginForm Plain text password entered in the form
+ * @param hashedPasswordFromDatabase Hashed password from db
+ */
 function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
     return new Promise((resolve, reject) => {
         bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, (err, doesMatch) => {
@@ -30,6 +36,7 @@ function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
     });
 }
 
+// checkSigned() checks if the userId has already signed the petition
 function checkSigned(userId) {
     return new Promise((resolve, reject) => {
         let query = "SELECT * from signatures WHERE user_id = $1";
@@ -45,6 +52,10 @@ function checkSigned(userId) {
     });
 }
 
+/**
+ * updateProfile inserts user information in the user_profiles table
+ * if there is already data for this user_id, the information is updated
+ */
 function updateProfile(age, city, url, userId) {
     return new Promise((resolve, reject) => {
         let query =
@@ -62,10 +73,16 @@ function updateProfile(age, city, url, userId) {
     });
 }
 
+/**
+ * updateuser() updates the database based on the passed-in data
+ * If a password was passed, it is hashed and updated
+ */
+
 function updateUser(first, last, email, user_id, pass) {
     let query = "";
     let values = [first, last, email, user_id];
 
+    // Use a promise for updating password and not updating password cases
     let prom;
 
     if (pass) {
@@ -101,11 +118,17 @@ function updateUser(first, last, email, user_id, pass) {
         });
 }
 
+// getSigners() gets and returns all signers of the petition
 function getSigners() {
     return new Promise((resolve, reject) => {
         let query =
             "SELECT first, last, age, city, url from users join signatures on users.id = signatures.user_id join user_profiles on users.id = user_profiles.user_id";
 
+        /**
+         * Check if signers are in cache.
+         * If yes, get them from cache
+         * If no, get them from the db and put them in the cache
+         */
         redis.get("signers").then(signers => {
             if (signers) {
                 resolve(JSON.parse(signers));

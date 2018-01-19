@@ -48,7 +48,6 @@ router.post("/register", parseForm, csrfProtection, (req, res) => {
 });
 
 router.get("/login", csrfProtection, (req, res) => {
-    // console.log("Login user session: ", req.session.user);
     if (!req.session.user) {
         res.render("user/login", {
             csrfToken: req.csrfToken(),
@@ -71,7 +70,6 @@ router.post("/login", csrfProtection, (req, res) => {
     db
         .query(query, [email])
         .then(results => {
-            console.log(results.rows[0]);
             req.session.user = {
                 id: results.rows[0].id,
                 first: results.rows[0].first
@@ -113,7 +111,6 @@ router.post("/login", csrfProtection, (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-    // req.session = null;
     req.session.destroy();
     res.redirect("/");
 });

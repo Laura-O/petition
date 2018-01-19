@@ -65,11 +65,13 @@ router.get("/profile/edit", csrfProtection, middleware.requireSession, (req, res
 router.post("/profile/edit", parseForm, csrfProtection, middleware.requireSession, (req, res) => {
     let { first, last, email } = req.body;
 
+    // Return to form when not all information was entered
     if (!(first && last && email)) {
         req.flash("error", "Please enter all required fields!");
         return res.redirect("/profile/edit");
     }
 
+    // If an empty string was passed, the value should be 'null'
     let city = req.body.city || null;
     let age = req.body.age || null;
     let url = req.body.url || null;
