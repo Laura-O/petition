@@ -1,21 +1,14 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const cookieParser = require("cookie-parser");
-const cookieSession = require("cookie-session");
-const bcrypt = require("bcryptjs");
 const flash = require("connect-flash");
-const csrf = require("csurf");
 const bodyParser = require("body-parser");
-
-const db = require("./models/db.js");
-
 const authRoutes = require("./routes/auth.js");
 const petitionRoutes = require("./routes/sign.js");
 const indexRoutes = require("./routes/index.js");
 const userRoutes = require("./routes/user.js");
-
-var csrfProtection = csrf({ cookie: true });
-var parseForm = bodyParser.urlencoded({ extended: false });
+const session = require("express-session");
+const Store = require("connect-redis")(session);
 
 let hbs = exphbs.create({
     defaultLayout: "main",
@@ -31,12 +24,46 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(flash());
 
+var store = {};
+if (process.env.REDIS_URL) {
+    store = {
+        url: process.env.REDIS_URL
+    };
+} else {
+    store = {
+        ttl: 3600, //time to live
+        host: "localhost",
+        port: 6379
+    };
+}
+
+app.use(cookieParser());
 app.use(
-    cookieSession({
-        name: "session",
-        keys: ["key1", "key2"]
+    session({
+        store: new Store(store),
+        resave: true,
+        saveUninitialized: true,
+        secret: "my super fun secret"
     })
 );
+
+// app.use(
+//     session({
+//         store: new Store(
+//             process.env.REDIS_URL
+//                 ? {
+//                     url: process.env.REDIS_URL
+//                 }
+//                 : {
+//                     host: "localhost",
+//                     port: 6379
+//                 }
+//         ),
+//         resave: false,
+//         saveUninitialized: true,
+//         secret: "my super fun secret"
+//     })
+// );
 
 app.use("/styles", express.static(__dirname + "/styles"));
 app.use("/js", express.static(__dirname + "/js"));

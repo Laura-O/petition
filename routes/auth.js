@@ -113,7 +113,8 @@ router.post("/login", csrfProtection, (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-    req.session = null;
+    // req.session = null;
+    req.session.destroy();
     res.redirect("/");
 });
 

@@ -1,27 +1,27 @@
 const Pool = require("pg-pool");
 const url = require("url");
 
-// const params = url.parse(
-//     process.env.DATABASE_URL || "postgres://petition:petition@localhost:5432/petition"
-// );
-// const auth = params.auth ? params.auth.split(":") : {};
-
-// const config = {
-//     user: auth[0],
-//     password: auth[1],
-//     host: params.hostname,
-//     port: params.port,
-//     database: params.pathname.split("/")[1],
-//     ssl: true
-// };
-
-// console.log(config);
+const params = url.parse(
+    process.env.DATABASE_URL || "postgres://petition:petition@localhost:5432/petition"
+);
+const auth = params.auth ? params.auth.split(":") : {};
 
 const config = {
-    host: "localhost",
-    port: 5432,
-    database: "petition"
+    user: auth[0],
+    password: auth[1],
+    host: params.hostname,
+    port: params.port,
+    database: params.pathname.split("/")[1],
+    ssl: true
 };
+
+console.log(config);
+
+// const config = {
+//     host: "localhost",
+//     port: 5432,
+//     database: "petition"
+// };
 
 const pool = new Pool(config);
 pool.on("error", err => {
