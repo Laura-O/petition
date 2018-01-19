@@ -18,7 +18,7 @@ router.get("/profile", csrfProtection, middleware.requireSession, (req, res) => 
                 csrfToken: req.csrfToken(),
                 user: results.rows[0],
                 error: req.flash("error"),
-                info: req.flash("info"),
+                info: req.flash("info")
             });
         })
         .catch(err => {
@@ -54,7 +54,7 @@ router.get("/profile/edit", csrfProtection, middleware.requireSession, (req, res
                 csrfToken: req.csrfToken(),
                 user: results.rows[0],
                 error: req.flash("error"),
-                info: req.flash("info"),
+                info: req.flash("info")
             });
         })
         .catch(err => {

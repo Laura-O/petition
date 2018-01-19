@@ -37,16 +37,16 @@ const query = (sql, params) => {
                     resolve(results);
                     client.release();
                 })
-                .catch(e => {
-                    reject(e);
+                .catch(err => {
+                    reject(err);
                     client.release();
-                    console.error("query error", e.message, e.stack);
+                    console.error("query error", err.message, err.stack);
                 });
         });
     });
 };
 
 module.exports = {
-    query: query,
-    pool: pool
+    query,
+    pool
 };

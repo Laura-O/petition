@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(flash());
 
-var store = {};
+let store = {};
 if (process.env.REDIS_URL) {
     store = {
         url: process.env.REDIS_URL
@@ -46,24 +46,6 @@ app.use(
         secret: "my super fun secret"
     })
 );
-
-// app.use(
-//     session({
-//         store: new Store(
-//             process.env.REDIS_URL
-//                 ? {
-//                     url: process.env.REDIS_URL
-//                 }
-//                 : {
-//                     host: "localhost",
-//                     port: 6379
-//                 }
-//         ),
-//         resave: false,
-//         saveUninitialized: true,
-//         secret: "my super fun secret"
-//     })
-// );
 
 app.use("/styles", express.static(__dirname + "/styles"));
 app.use("/js", express.static(__dirname + "/js"));

@@ -5,7 +5,7 @@ router.get("/", (req, res) => {
     res.render("main", {
         user: req.session.user,
         error: req.flash("error"),
-        info: req.flash("info"),
+        info: req.flash("info")
     });
 });
 

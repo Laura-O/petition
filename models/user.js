@@ -46,7 +46,6 @@ function checkSigned(userId) {
 }
 
 function updateProfile(age, city, url, userId) {
-    console.log(userId);
     return new Promise((resolve, reject) => {
         let query =
             "INSERT INTO user_profiles (age, city, url, user_id) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET user_id = EXCLUDED.user_id, age = EXCLUDED.age, city = EXCLUDED.city, url = EXCLUDED.url";
@@ -64,8 +63,6 @@ function updateProfile(age, city, url, userId) {
 }
 
 function updateUser(first, last, email, user_id, pass) {
-    console.log("update user: ", first, last, email, user_id, pass);
-
     let query = "";
     let values = [first, last, email, user_id];
 
