@@ -1,21 +1,28 @@
 <body>
     <div class="container">
         <div id="thanks-box">
+            <div id="screaming-peach">
+                <img src="/assets/screaming-princess.png" alt="peach">
+            </div>
             <div id="thanks-message">Thanks for signing, {{user.first}}!</div>
             <div id="signature">
                 <img src="{{img}}">
             </div>
         </div>
         <div>
-            <a href="/signers">See all {{number}} signers</a>
+            <form action="/signers">
+                <input type="submit" class="non-button" value="See all {{number}} signers" />
+            </form>
         </div>
         <div>
-            <a href="/profile/edit">Edit your profile</a>
+            <form action="/profile/edit">
+                <input type="submit" class="non-button" value="Edit your profile" />
+            </form>
         </div>
         <div>
             <form action="/delete" method="post">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                <input type="submit" id="delete-button" name="delete" value="Delete signature" />
+                <input type="submit" class="non-button" name="delete" value="Delete signature" />
             </form>
         </div>
     </div>
