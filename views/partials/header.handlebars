@@ -1,30 +1,24 @@
 <header class="top">
-    {{!--
-    <div class="logo">
-        <img src="./assets/mario-logo.png" alt="" srcset="">
-    </div> --}}
     <h1 id="colored-title">
         <img src="./assets/mario-logo.png" alt="" srcset="">Petition: {{> title}}</h1>
 
     <nav class="flex-nav">
-        <a href="#" class="toggleNav">
-            <i class="fa fa-bars"></i>Menu</a>
         <ul>
             {{#if user}}
             <li>
                 <form action="/logout" method="POST">
-                    <input type="submit" value="Logout" class="logout" />
+                    <input type="submit" value="Logout" id="logout" />
                 </form>
             </li>
             {{else}}
             <li>
                 <form action="/login" method="GET">
-                    <input type="submit" value="Login" class="login" />
+                    <input type="submit" value="Login" id="login" />
                 </form>
             </li>
             <li>
                 <form action="/register" method="GET">
-                    <input type="submit" value="Register" class="register" />
+                    <input type="submit" value="Register" id="register" />
                 </form>
             </li>
             {{/if}}

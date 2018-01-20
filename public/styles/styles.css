@@ -108,14 +108,9 @@ h1 {
     vertical-align: middle;
 }
 
-.flex-nav li a:hover,
+.flex-nav li input:hover,
 .flex-nav li a:focus {
     color: #222;
-}
-
-.flex-nav .social {
-    -webkit-box-flex: 1;
-    flex: 1;
 }
 
 .form {
@@ -176,8 +171,6 @@ label {
 }
 
 header {
-    /* display: flex;
-    justify-content: space-between; */
     margin: 0px 10px 15px;
 }
 
@@ -222,57 +215,6 @@ footer {
     width: 100%;
 }
 
-@media all and (max-width: 768px) {
-    .flex-nav li,
-    .gallery li {
-        flex-basis: 100%;
-    }
-
-    .wrapper {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .wrapper > * {
-        order: 99;
-    }
-
-    .flex-nav {
-        order: 1;
-    }
-
-    .toggleNav {
-        display: block;
-        color: gray;
-    }
-
-    .toggleNav:hover,
-    .toggleNav:focus {
-        color: black;
-        text-decoration: none;
-    }
-
-    .flex-nav {
-        border-bottom: 1px solid black;
-    }
-
-    .flex-nav ul {
-        display: none;
-        flex-wrap: wrap;
-    }
-
-    .flex-nav ul.open {
-        display: flex;
-    }
-
-    .top {
-        order: 2;
-    }
-    #colored-title {
-        font-size: 20px;
-    }
-}
-
 /* Login & logout buttons */
 .flex-nav input[type="submit"] {
     font-family: "VT323", monospace;
@@ -290,19 +232,19 @@ footer {
     transition-property: all;
 }
 
-.login {
+#login {
     background: url("../assets/login.png") no-repeat 0px 2px;
 }
 
-.logout {
+#logout {
     background: url("../assets/logout.png") no-repeat 0px 2px;
 }
 
-.logout:hover {
+#logout:hover {
     color: yellow;
 }
 
-.register {
+#register {
     background: url("../assets/register.png") no-repeat 0px 2px;
 }
 
@@ -450,4 +392,41 @@ h1 img {
     transform: scale(1.5);
     padding-right: 20px;
     vertical-align: center;
+}
+
+@media all and (max-width: 780px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+}
+
+@media all and (max-width: 615px) {
+    header h1 {
+        font-size: 0.75em;
+    }
+
+    #colored-title img {
+        width: 10px;
+    }
+
+    #login {
+        background-size: 10px;
+        padding: 0px;
+        text-indent: 15px;
+        width: 70px;
+    }
+
+    #logout {
+        background-size: 10px;
+        padding: 0px;
+        text-indent: 15px;
+        width: 70px;
+    }
+
+    #register {
+        background-size: 10px;
+        padding: 0px;
+        text-indent: 15px;
+        width: 70px;
+    }
 }
