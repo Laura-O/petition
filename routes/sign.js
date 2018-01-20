@@ -22,7 +22,6 @@ router.get("/petition", csrfProtection, middleware.requireSession, (req, res) =>
             info: req.flash("info")
         });
     } else {
-        req.flash("info", "You have already signed our petition!");
         res.redirect("/thanks");
     }
 });
