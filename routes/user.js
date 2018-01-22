@@ -6,6 +6,7 @@ const middleware = require("../middleware/index.js");
 const csrf = require("csurf");
 const bodyParser = require("body-parser");
 const csrfProtection = csrf({ cookie: true });
+const redis = require("../middleware/redis.js");
 const parseForm = bodyParser.urlencoded({ extended: false });
 
 router.get("/profile", csrfProtection, middleware.requireSession, (req, res) => {
@@ -83,6 +84,7 @@ router.post("/profile/edit", parseForm, csrfProtection, middleware.requireSessio
             user
                 .updateProfile(age, city, url, req.session.user.id)
                 .then(() => {
+                    redis.del("signers");
                     res.redirect("/petition");
                 })
                 .catch(err => {
