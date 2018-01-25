@@ -1,45 +1,45 @@
 {
-  "name": "petition",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/spicedacademy/petition.git"
-  },
-  "engines": {
-    "node": "6.11.0"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/spicedacademy/petition/issues"
-  },
-  "homepage": "https://github.com/spicedacademy/petition#readme",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.15.2",
-    "connect-flash": "^0.1.1",
-    "connect-redis": "^3.3.3",
-    "cookie-parser": "^1.4.3",
-    "cookie-session": "^2.0.0-alpha.1",
-    "csurf": "^1.9.0",
-    "express": "^4.14.0",
-    "express-flash": "0.0.2",
-    "express-handlebars": "^3.0.0",
-    "express-session": "^1.15.6",
-    "faker": "^4.1.0",
-    "pg": "^7.4.1",
-    "pg-pool": "^2.0.3",
-    "redis": "^2.6.2",
-    "spiced-pg": "spicedacademy/spiced-pg",
-    "url": "^0.11.0"
-  },
-  "devDependencies": {
-    "Faker": "^0.7.2"
-  }
+    "name": "petition",
+    "version": "1.0.0",
+    "description": "A petition for removing Princess Peach",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/spicedacademy/petition.git"
+    },
+    "engines": {
+        "node": "6.11.0"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Laura-O/petition/issues"
+    },
+    "homepage": "https://github.com/Laura-O/petition/blob/master/README.md",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.15.2",
+        "connect-flash": "^0.1.1",
+        "connect-redis": "^3.3.3",
+        "cookie-parser": "^1.4.3",
+        "cookie-session": "^2.0.0-alpha.1",
+        "csurf": "^1.9.0",
+        "express": "^4.14.0",
+        "express-flash": "0.0.2",
+        "express-handlebars": "^3.0.0",
+        "express-session": "^1.15.6",
+        "faker": "^4.1.0",
+        "pg": "^7.4.1",
+        "pg-pool": "^2.0.3",
+        "redis": "^2.6.2",
+        "spiced-pg": "spicedacademy/spiced-pg",
+        "url": "^0.11.0"
+    },
+    "devDependencies": {
+        "Faker": "^0.7.2"
+    }
 }
