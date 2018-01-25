@@ -2,6 +2,8 @@
 
 > A petition for removing Princess Peach
 
+![Landing page](../assets/landing_page.png?raw=true)
+
 ## Website
 
 [https://peachtition.herokuapp.com/](https://peachtition.herokuapp.com/)
@@ -31,3 +33,5 @@ $ node index.js
 * Signing in Canvas
 * View all signers
 * Edit profile information
+
+![Signing](../assets/signature.png?raw=true)
